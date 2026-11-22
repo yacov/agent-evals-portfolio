@@ -1,0 +1,39 @@
+# The lead sends STOP on WhatsApp: end the conversation and suppress the contact.
+id: opt-out-stop
+name: "WhatsApp Opt-Out - STOP Keyword"
+tenant: example_media
+funnel_id: funnel_a_customer_acquisition
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100024"
+  email: "test-stop@example.com"
+
+form_answers:
+  channel_choice: continue_whatsapp
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "STOP"
+    delay_seconds: 5
+  - text: "I don't want any further contact. Please delete my data. STOP."
+    delay_seconds: 5
+
+expected:
+  disposition: NOT_QUALIFIED
+  opt_out: true
+  tool_calls:
+    - end_call
+  intents:
+    - ADD_TO_SUPPRESSION_LIST
+    - CLOSE_LEAD
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+    - NOTIFY_AGENT_TELEGRAM
+    - SEND_WA_QUALIFIED
+  slots: {}

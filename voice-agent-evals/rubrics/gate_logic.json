@@ -1,0 +1,17 @@
+{
+  "name": "gate_logic_correctness",
+  "description": "Evaluates whether the v3 qualification gate logic was applied correctly to determine the lead_disposition. Checks disqualify_values, disqualify_on_fail, pass counting, and required-gate handling. Critical for catching regressions in the qualification engine prompt.",
+  "model": "gpt-4.1",
+  "prompt": "You are a quality reviewer for a lead-qualification system (the lead-qualification platform).\n\nThe system uses a v3 qualification engine with the following rules:\n- **disqualify_values**: Certain answer values lead to immediate disqualification (before pass counting).\n- **disqualify_on_fail**: If a required gate is not passed, the lead is disqualified immediately.\n- **required**: Required gates must be passed; optional gates influence the score.\n- **pass counting**: The number of passed gates determines whether the lead is QUALIFIED or PARTIAL.\n\n**Important order:** disqualify_values are checked FIRST, THEN pass counting.\n\nINPUT (system_prompt with gate definitions + user_message with the collected data):\n{{input}}\n\nSYSTEM OUTPUT (produced IntentJson with lead_disposition):\n{{output}}\n\nEXPECTED OUTPUT (correct reference disposition from the ground truth):\n{{ground_truth}}\n\nRate the correctness of the gate logic on a scale from 0 to 1:\n\n**Scoring criteria:**\n- 1.0: The lead_disposition matches the expected one exactly. All gate rules were applied correctly.\n- 0.7-0.9: The disposition is correct, but the reasoning suggests slight misjudgements of individual gates.\n- 0.4-0.6: The disposition differs from the expected one but is partly understandable (e.g. PARTIAL instead of NOT_QUALIFIED when data is missing).\n- 0.1-0.3: Wrong disposition despite a clear gate violation, e.g. QUALIFIED although a disqualify_values match was present.\n- 0.0: Serious logic error, e.g. an OPT_OUT disposition without an opt-out signal, or QUALIFIED despite several disqualify_on_fail violations.\n\n**Check in particular:**\n- Was a disqualify_values match correctly classified as NOT_QUALIFIED or OPT_OUT?\n- Did a required gate with disqualify_on_fail correctly lead to disqualification?\n- Is the choice between QUALIFIED and PARTIAL justified by the number of passed gates?\n- Was a QUALIFIED disposition only given when all required gates were passed?\n\nReply with valid JSON only:\n{\"score\": <float 0.0-1.0>, \"reasoning\": \"<reasoning, max. 3 sentences>\", \"disposition_match\": <true|false>}",
+  "variables": [
+    "input",
+    "output",
+    "ground_truth"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "gate_logic_correctness",
+  "notes": "The disposition_match field makes it easy to compute a binary accuracy metric next to the continuous score. Gate definitions are embedded in the system_prompt inside {{input}}; no separate funnel config is needed."
+}

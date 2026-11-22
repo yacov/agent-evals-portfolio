@@ -1,0 +1,36 @@
+# Busy lead asks for a callback tomorrow at 10 before giving any details.
+id: partial-callback
+name: "Partial - Callback Requested Tomorrow at 10"
+tenant: example_media
+funnel_id: funnel_a_customer_acquisition
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100025"
+  email: "test-callback-media@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "I'm busy right now. Could you call me back tomorrow at 10?"
+    delay_seconds: 5
+  - text: "Yes, tomorrow morning please. I'd like to hang up now."
+    delay_seconds: 5
+  - text: "Bye, talk tomorrow."
+    delay_seconds: 5
+
+expected:
+  disposition: PARTIAL
+  tool_calls:
+    - end_call
+  intents:
+    - SCHEDULE_CALLBACK
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots: {}

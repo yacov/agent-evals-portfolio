@@ -1,0 +1,17 @@
+{
+  "name": "psychological_profile_quality",
+  "description": "Evaluates the quality and usefulness of AI-generated psychological profiles for lead qualification. Checks completeness, consistency with the conversation data, and actionability for sales teams.",
+  "model": "gpt-4.1",
+  "prompt": "You are an expert in sales psychology and you evaluate the quality of an AI-generated psychological profile of a lead.\n\nFrom a qualification conversation, the system created the following psychological profile:\n\nPROFILE:\n{{output}}\n\nCONVERSATION DATA (collected slots, engagement, summary):\n{{input}}\n\nEXPECTED REFERENCE (if available):\n{{ground_truth}}\n\nRate the profile on a scale from 0 to 1 using the following criteria:\n\n**1. Completeness (25%)**\n- Are all 10 fields filled in? (communication_style, decision_speed, price_sensitivity, motivation_primary, motivation_secondary, risk_tolerance, personality_traits, selling_signals, concerns, trust_level)\n- Does personality_traits have at least 2 entries?\n- Is motivation_primary a complete sentence (not empty or generic)?\n\n**2. Consistency with the conversation data (25%)**\n- Does communication_style match the course of the conversation? (e.g. short answers = direct, many follow-up questions = cautious)\n- Does decision_speed match the appointment booking? (immediate appointment = fast, callback requested = slow)\n- Does trust_level match the engagement level?\n- Can selling_signals and concerns be derived from the actual conversation?\n\n**3. Actionability for sales (25%)**\n- Can a sales rep use the profile to prepare the follow-up conversation better?\n- Are the personality_traits specific enough (not just 'cooperative', 'friendly')?\n- Do selling_signals give concrete pointers for the next step?\n- Are the concerns helpful for objection handling?\n\n**4. No hallucinations (25%)**\n- Was no information invented that did not come up in the conversation?\n- Are the assessments plausible given the available data?\n- For short conversations (e.g. opt-out, quick disqualification): are the assessments appropriately cautious?\n\n**Special rules:**\n- For opt-out / DO_NOT_CONTACT conversations: a minimal profile is acceptable (score 0.5-0.7 if consistent)\n- For QUALIFIED with an appointment: a complete, detailed profile is expected (score < 0.7 if incomplete)\n- For PARTIAL: medium level of detail expected\n\nReply with valid JSON only:\n{\"score\": <float 0.0-1.0>, \"reasoning\": \"<reasoning, max. 5 sentences>\", \"issues\": [\"<list of concrete problems>\"]}",
+  "variables": [
+    "input",
+    "output",
+    "ground_truth"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "psychological_profile_quality",
+  "notes": "Four dimensions: completeness, consistency, actionability, no hallucinations. Expectations are adjusted to conversation length and disposition."
+}

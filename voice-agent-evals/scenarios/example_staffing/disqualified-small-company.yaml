@@ -1,0 +1,38 @@
+# company_size = 3 fails the "at least 5 employees" gate.
+id: disqualified-small-company
+name: "Disqualified - Company Too Small (fewer than 5 employees)"
+tenant: example_staffing
+funnel_id: funnel_a_b2b
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100004"
+  email: "test-small-company@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "We're a small trade business, 3 employees. I'm looking for an electrician."
+    delay_seconds: 5
+  - text: "No thanks, I'll get back to you myself."
+    delay_seconds: 5
+
+expected:
+  disposition: NOT_QUALIFIED
+  tool_calls:
+    - collect_slot
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    company_size: "3"
+    industry: "trades"
+    staffing_need: "electrician"

@@ -1,0 +1,48 @@
+# WhatsApp lead with a property in a suburb 25 km from the city centre, which
+# is inside the service area (tests that "not in the city" is not "out of area").
+id: whatsapp-qualified-seller
+name: "WhatsApp Qualified Seller - Suburb Inside the Service Area"
+tenant: example_realty
+funnel_id: real_estate_seller
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100016"
+  email: "test-wa-seller@example.com"
+
+form_answers:
+  channel_choice: continue_whatsapp
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "I'd like to sell my house in Suburb Town. The address is 5 Town Hall Square, Suburb Town. Suburb Town is right next to Central City, only 25 km away."
+    delay_seconds: 5
+  - text: "I'm the owner. I want to sell within 3 months. Yes, I'm happy to work with an agent."
+    delay_seconds: 5
+  - text: "Yes, I'd like an appointment. The first available slot works for me."
+    delay_seconds: 5
+  - text: "Please book the first slot."
+    delay_seconds: 5
+
+expected:
+  disposition: QUALIFIED
+  tool_calls:
+    - collect_slot
+    - check_calendar
+    - book_appointment
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    address_raw: "5 Town Hall Square, Suburb Town"
+    ownership: "Owner"
+    selling_timeline: "3-6 months"
+    realtor_willingness: "Yes"
+    outside_service_area: false

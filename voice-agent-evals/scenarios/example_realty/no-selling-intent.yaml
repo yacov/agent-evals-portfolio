@@ -1,0 +1,36 @@
+# The lead only wants a valuation and does not want to sell: no appointment.
+id: no-selling-intent
+name: "Not Qualified - Valuation Only, No Intention to Sell"
+tenant: example_realty
+funnel_id: real_estate_seller
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100013"
+  email: "test-nosell@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "I'd just like to know what my flat is worth. I don't really want to sell."
+    delay_seconds: 5
+  - text: "No, I really don't want to sell. Just a valuation."
+    delay_seconds: 5
+
+expected:
+  disposition: NOT_QUALIFIED
+  tool_calls:
+    - collect_slot
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    realtor_willingness: "No"

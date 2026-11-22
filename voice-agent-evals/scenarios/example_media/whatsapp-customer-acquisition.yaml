@@ -1,0 +1,46 @@
+# Advertising lead that qualifies fully over WhatsApp.
+id: whatsapp-customer-acquisition
+name: "WhatsApp Advertising Lead - Car Dealership, Full Qualification"
+tenant: example_media
+funnel_id: funnel_a_customer_acquisition
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100026"
+  email: "test-wa-ads@example.com"
+
+form_answers:
+  channel_choice: continue_whatsapp
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "I'm the owner of Sample Motors in the city centre. We're looking for local advertising for our workshop. Advertising in local shops sounds interesting."
+    delay_seconds: 5
+  - text: "Yes, we're very interested. I'm the managing director."
+    delay_seconds: 5
+  - text: "Yes, I'd like to set up an appointment. Please show me the free slots."
+    delay_seconds: 5
+  - text: "Please book the first slot."
+    delay_seconds: 5
+
+expected:
+  disposition: QUALIFIED
+  tool_calls:
+    - collect_slot
+    - check_calendar
+    - book_appointment
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    company_name: "Sample Motors"
+    region: "Central City"
+    decision_maker: "managing director"
+    interest_level: "high"

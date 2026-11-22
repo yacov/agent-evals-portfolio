@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Scripted test conversation",
+  "description": "A scripted lead conversation plus the outcome the agent is expected to reach. 'intents' must all be present in the Phase 2 result; 'forbidden_intents' must not appear.",
+  "type": "object",
+  "required": ["id", "name", "tenant", "funnel_id", "channel", "mode", "lead", "form_answers", "previous_context", "messages", "expected"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+    "name": {"type": "string", "minLength": 5},
+    "tenant": {"enum": ["example_realty", "example_staffing", "example_media"]},
+    "funnel_id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+    "channel": {"enum": ["voice", "whatsapp_text"]},
+    "mode": {"enum": ["voice", "whatsapp_text"]},
+    "lead": {
+      "type": "object",
+      "required": ["name", "phone", "email"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": ["string", "null"]},
+        "phone": {"type": "string", "pattern": "^\\+1555010[0-9]{4}$"},
+        "email": {"type": "string", "pattern": "^[a-z0-9.+-]+@example\\.com$"}
+      }
+    },
+    "form_answers": {"type": "object"},
+    "previous_context": {"type": ["object", "null"]},
+    "messages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["text", "delay_seconds"],
+        "additionalProperties": false,
+        "properties": {
+          "text": {"type": "string", "minLength": 1},
+          "delay_seconds": {"type": "number", "minimum": 0}
+        }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "required": ["disposition", "tool_calls", "intents", "slots"],
+      "additionalProperties": false,
+      "properties": {
+        "disposition": {"enum": ["QUALIFIED", "NOT_QUALIFIED", "PARTIAL"]},
+        "opt_out": {"type": "boolean"},
+        "tool_calls": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"enum": ["collect_slot", "check_calendar", "book_appointment", "reject_unsupported_location", "end_call"]}
+        },
+        "intents": {"type": "array", "items": {"$ref": "#/$defs/intent"}},
+        "forbidden_intents": {"type": "array", "items": {"$ref": "#/$defs/intent"}},
+        "slots": {"type": "object"}
+      }
+    }
+  },
+  "$defs": {
+    "intent": {
+      "enum": [
+        "BOOK_APPOINTMENT", "CRM_UPDATE", "SEND_WA_QUALIFIED", "RETRY_CALL", "SCHEDULE_CALLBACK",
+        "CLOSE_LEAD", "ADD_TO_SUPPRESSION_LIST", "NOTIFY_AGENT_TELEGRAM"
+      ]
+    }
+  }
+}

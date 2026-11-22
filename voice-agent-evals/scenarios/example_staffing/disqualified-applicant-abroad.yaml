@@ -1,0 +1,39 @@
+# Applicant without residence in the country who does not want to relocate.
+# lives_in_country = false is a disqualify_on_fail gate -> NOT_QUALIFIED at once.
+id: disqualified-applicant-abroad
+name: "Disqualified Applicant - No Residence in the Country (Hard Disqualifier)"
+tenant: example_staffing
+funnel_id: funnel_b_applicant
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: "Jan Example"
+  phone: "+15550100008"
+  email: "test-abroad@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "My name is Jan Example and I'd like to work in your country."
+    delay_seconds: 5
+  - text: "I live abroad and have no permanent address in your country. I also don't want to move."
+    delay_seconds: 5
+
+expected:
+  disposition: NOT_QUALIFIED
+  tool_calls:
+    - collect_slot
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    first_name: "Jan"
+    last_name: "Example"
+    lives_in_country: false

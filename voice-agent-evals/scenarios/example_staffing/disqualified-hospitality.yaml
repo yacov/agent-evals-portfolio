@@ -1,0 +1,37 @@
+# Restaurants are a hard disqualify_value in the industry_valid gate.
+id: disqualified-hospitality
+name: "Disqualified - Hospitality Industry (Hard Disqualifier)"
+tenant: example_staffing
+funnel_id: funnel_a_b2b
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100003"
+  email: "test-hospitality@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "We're a restaurant in the city, The Example Inn. Industry: hospitality. 8 employees in total."
+    delay_seconds: 5
+  - text: "Yes, exactly, we're a hospitality business, a restaurant."
+    delay_seconds: 5
+
+expected:
+  disposition: NOT_QUALIFIED
+  tool_calls:
+    - collect_slot
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    industry: "hospitality"
+    company_name: "The Example Inn"

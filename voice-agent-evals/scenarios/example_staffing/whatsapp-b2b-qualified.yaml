@@ -1,0 +1,49 @@
+# Employer lead that chose to continue on WhatsApp: the agent skips the
+# recording-consent step and goes straight to qualification.
+id: whatsapp-b2b-qualified
+name: "WhatsApp Employer Lead - Full Qualification and Booking"
+tenant: example_staffing
+funnel_id: funnel_a_b2b
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: "Mr. Sample"
+  phone: "+15550100007"
+  email: "test-wa-b2b@example.com"
+
+form_answers:
+  channel_choice: continue_whatsapp
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "We're a company. Sample Logistics Ltd., here in the city. I'm Mr. Sample, the managing director. 25 employees."
+    delay_seconds: 5
+  - text: "We urgently need 4 warehouse workers. The need is immediate."
+    delay_seconds: 5
+  - text: "Yes, I'd like to set up an appointment. Please show me the free slots."
+    delay_seconds: 5
+  - text: "Please book the first slot."
+    delay_seconds: 5
+
+expected:
+  disposition: QUALIFIED
+  tool_calls:
+    - collect_slot
+    - check_calendar
+    - book_appointment
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    company_name: "Sample Logistics Ltd."
+    industry: "logistics"
+    company_size: "25"
+    staffing_need: "urgent"
+    num_employees_needed: "4"
+    specific_roles: "warehouse workers"

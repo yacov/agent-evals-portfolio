@@ -1,0 +1,17 @@
+{
+  "name": "date_formatting",
+  "description": "Evaluates the correctness of date/time formatting in the agent's speech.",
+  "model": "gpt-4.1",
+  "prompt": "You are an expert in the grammar of the language the agent speaks. Evaluate the date formatting in the statements of the AI agent (main agent). Reply in JSON format.\n\nCheck:\n1. Ordinal numbers: 'the third of April' (correct) vs 'the Third of April' or 'Third April' (wrong)\n2. Complete format: '[weekday], the [ordinal] of [month] at [time]'\n3. No clipped or garbled dates ('April 22', '10 30 ...')\n4. Do not drop the subject: 'I am checking' instead of 'Checking'\n5. Formal goodbye: a formal closing ('Thank you, goodbye') instead of an informal one ('see ya')\n\nTranscript:\n{{input}}\n\nExpected result:\n{{ground_truth}}\n\nAgent output:\n{{output}}\n\nScore 0.0-1.0:\n- 1.0: All dates grammatically correct and fully formatted\n- 0.75: Small errors (e.g. capitalisation of an ordinal)\n- 0.5: Date recognisable but grammatically wrong\n- 0.25: Clipped or unintelligible date\n- 0.0: No date stated, or completely wrong\n\nReply as JSON: {\"score\": <number>, \"reasoning\": \"<reasoning>\"}",
+  "variables": [
+    "input",
+    "output",
+    "ground_truth"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "date_formatting",
+  "notes": "Examples were adapted to English; the criteria (ordinals, full format, no clipped dates, explicit subject, formal goodbye) are unchanged."
+}

@@ -1,0 +1,54 @@
+# Fully qualified employer lead: the agent collects all slots, checks the
+# calendar and books during the conversation.
+id: qualified-b2b-happy-path
+name: "Fully Qualified Employer Lead - Happy Path"
+tenant: example_staffing
+funnel_id: funnel_a_b2b
+channel: whatsapp_text
+mode: whatsapp_text
+
+# Test lead (created in the test database before the run)
+lead:
+  name: "Mr. Sample"
+  phone: "+15550100001"
+  email: "test-b2b@example.com"
+
+# Pre-filled slots (simulates answers from the lead form)
+form_answers: {}
+
+# Earlier conversation context (for follow-up scenarios)
+previous_context: null
+
+# Script: each message is sent by the simulated lead
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "We're a logistics company in the city, Sample Logistics Ltd. I'm the managing director, Mr. Sample. We have 20 employees."
+    delay_seconds: 5
+  - text: "We urgently need 3 new warehouse workers. The positions need to be filled right away."
+    delay_seconds: 5
+  - text: "Yes, an appointment would be good. Please show me the available times."
+    delay_seconds: 5
+  - text: "The first slot works for me. Please book it."
+    delay_seconds: 5
+
+# Expected outcome. The agent books during the call, so the dispatcher must
+# not book again (double-booking protection).
+expected:
+  disposition: QUALIFIED
+  tool_calls:
+    - collect_slot
+    - check_calendar
+    - book_appointment
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    company_name: "Sample Logistics Ltd."
+    industry: "logistics"
+    company_size: "20"
+    staffing_need: "urgent"
+    num_employees_needed: "3"
+    specific_roles: "warehouse workers"

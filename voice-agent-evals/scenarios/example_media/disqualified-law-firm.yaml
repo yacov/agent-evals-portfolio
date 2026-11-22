@@ -1,0 +1,39 @@
+# Law firms are a hard disqualifier for this tenant: the not_lawyer gate has
+# disqualify_on_fail = true and disqualify_values such as "lawyer", "attorney", "law firm".
+id: disqualified-law-firm
+name: "Disqualified - Law Firm (Hard Disqualifier)"
+tenant: example_media
+funnel_id: funnel_a_customer_acquisition
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100023"
+  email: "test-law-firm@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "I'm Dr. Test, attorney at Test & Partner in North City. We're looking for advertising options."
+    delay_seconds: 5
+  - text: "Yes, exactly, I'm a lawyer. We're an employment law firm."
+    delay_seconds: 5
+
+expected:
+  disposition: NOT_QUALIFIED
+  tool_calls:
+    - collect_slot
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    company_name: "Test & Partner"
+    industry: "law firm"
+    region: "North City"

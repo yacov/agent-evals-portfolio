@@ -1,0 +1,15 @@
+{
+  "name": "redundant_questions",
+  "description": "Detects when the agent re-asks for information the user already volunteered. Tests information inference from self-introductions and multi-slot utterances.",
+  "model": "gpt-4.1",
+  "prompt": "You are a strict quality reviewer for AI voice assistants.\n\nAnalyse the following conversation transcript and check whether the agent asked for information the lead had already volunteered.\n\n=== TRANSCRIPT ===\n{{input}}\n\n=== EXPECTED BEHAVIOUR ===\n{{ground_truth}}\n\n=== SCORING CRITERIA ===\n\nCheck EVERY user turn for information that was already given:\n\n1. COMPANY NAME: Did the lead introduce themselves with a company name (e.g. 'This is Max Example from Example Metalworks Ltd.')? If so, did the agent STILL ask for the company name? That is an error.\n\n2. DECISION-MAKER STATUS: Did the lead state their position (e.g. 'managing director', 'owner', 'CEO')? If so, did the agent STILL explicitly ask 'Are you the decision-maker?' or similar? That is an error.\n\n3. INDUSTRY: Did the lead already mention the industry in an earlier turn? Was it asked again anyway?\n\n4. MULTI-SLOT: Did the lead give several pieces of information in one sentence (e.g. 'I urgently need 4 metalworkers')? Did the agent recognise all parts or only one?\n\n=== SCORING ===\n- 1.0: The agent did NOT re-ask for any information already given. All volunteered data was recognised and stored via collect_slot.\n- 0.75: The agent re-asked for information already given once.\n- 0.5: The agent re-asked for information already given twice.\n- 0.25: The agent re-asked for information already given 3+ times.\n- 0.0: The agent systematically ignores information already given.\n\nReply ONLY with valid JSON:\n{\"score\": <float 0.0-1.0>, \"reasoning\": \"<reasoning>\", \"redundant_questions\": [\"<list of redundant questions>\"]}",
+  "variables": [
+    "input",
+    "ground_truth"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "redundant_questions"
+}

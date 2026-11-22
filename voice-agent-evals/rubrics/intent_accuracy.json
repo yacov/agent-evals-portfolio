@@ -1,0 +1,17 @@
+{
+  "name": "intent_classification_accuracy",
+  "description": "Evaluates whether the correct next_intents were selected from the profile's intent_mappings, and whether delay_hints and priorities fit the lead_disposition and the collected data. Catches regressions in intent routing logic.",
+  "model": "gpt-4.1",
+  "prompt": "You are a quality reviewer for a lead-qualification system (the lead-qualification platform).\n\nAfter a lead has been qualified, the system selects the next actions (next_intents) from the available intent mappings. Typical intents are:\n- **BOOK_APPOINTMENT**: Book an appointment in the booking calendar (only if no appointment is booked yet: appointment.booked != true)\n- **SEND_WA_QUALIFIED**: Send a WhatsApp message to the qualified lead\n- **RETRY_CALL**: Schedule another call attempt (e.g. for UNREACHABLE or PARTIAL)\n- **SCHEDULE_CALLBACK**: Schedule a callback at the requested time\n- **CLOSE_LEAD**: Mark the lead as closed (e.g. for NOT_QUALIFIED, OPT_OUT)\n- **ADD_TO_SUPPRESSION_LIST**: Block the contact details (ONLY for OPT_OUT)\n- **NOTIFY_AGENT_TELEGRAM**: Notify the sales rep\n- **CRM_UPDATE**: Push the lead data to the CRM\n\nINPUT (system_prompt with the available intents + user_message with the conversation data):\n{{input}}\n\nSYSTEM OUTPUT (produced IntentJson with next_intents):\n{{output}}\n\nEXPECTED OUTPUT (correct reference intents from the ground truth):\n{{ground_truth}}\n\nRate the intent selection on a scale from 0 to 1:\n\n**Scoring criteria:**\n- 1.0: All expected intents present, no unexpected ones. Delay hints and priorities correct.\n- 0.7-0.9: Main intents correct, but minor deviations (e.g. wrong delay_hint, missing secondary intent).\n- 0.4-0.6: Some important intents are missing or wrong intents were added.\n- 0.1-0.3: Essential intents missing or a contradictory combination (e.g. CLOSE_LEAD + BOOK_APPOINTMENT at the same time).\n- 0.0: Completely wrong intent selection, e.g. ADD_TO_SUPPRESSION_LIST without an OPT_OUT disposition.\n\n**Important rules:**\n- **Double-booking protection**: BOOK_APPOINTMENT must NOT be in next_intents if appointment.booked = true in the input data.\n- **OPT_OUT duty**: For disposition OPT_OUT, ADD_TO_SUPPRESSION_LIST MUST be included.\n- **delay_hint logic**: IMMEDIATE for critical actions (appointment booking, opt-out), NEXT_BUSINESS_HOUR for notifications, NEXT_DAY for repeat calls.\n- **Priority logic**: Priority 1 = highest urgency. Bookings and opt-outs should have the highest priority.\n- Consider the funnel context: real-estate leads (example_realty) need different intents than job-applicant leads (example_staffing).\n\nReply with valid JSON only:\n{\"score\": <float 0.0-1.0>, \"reasoning\": \"<reasoning, max. 3 sentences>\", \"missing_intents\": [\"<intent>\"], \"unexpected_intents\": [\"<intent>\"]}",
+  "variables": [
+    "input",
+    "output",
+    "ground_truth"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "intent_classification_accuracy",
+  "notes": "The missing_intents and unexpected_intents arrays allow analysis of systematic intent routing failures. Double-booking protection (no BOOK_APPOINTMENT when appointment.booked = true) is a critical regression test."
+}

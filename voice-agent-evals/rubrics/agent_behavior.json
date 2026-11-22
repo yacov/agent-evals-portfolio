@@ -1,0 +1,17 @@
+{
+  "name": "agent_behavior_quality",
+  "description": "Evaluates agent conversation behaviour: goodbye, slot collection correctness, calendar presentation, and transition phrases. Scores based on the actual agent messages and tool-call patterns.",
+  "model": "gpt-4.1",
+  "prompt": "You are a quality reviewer for AI voice assistants in B2B recruiting.\n\nEvaluate the BEHAVIOUR of the agent based on the conversation messages and tool calls.\n\n=== INPUT DATA ===\nAgent messages and tool results:\n{{input}}\n\nActual result (what the agent produced):\n{{output}}\n\nExpected behaviour:\n{{ground_truth}}\n\n=== SCORING CRITERIA (each 0.0 or 1.0) ===\n\n1. GOODBYE (25%): Did the agent say a polite goodbye before the conversation ended?\n   - 1.0: The agent said 'Thank you very much', 'Goodbye', 'Talk soon', 'All the best' or similar BEFORE end_call\n   - 0.0: The conversation ended abruptly without a goodbye\n   Check the agent_messages in the output: does the LAST message before end_call contain a goodbye?\n   Also check agent_behavior.has_goodbye if present.\n\n2. SLOT QUALITY (25%): Did the agent store questions as slot values?\n   - 1.0: All collect_slot calls contain real answers from the lead (no question marks, no question phrasing)\n   - 0.0: At least one slot contains a question instead of an answer (e.g. 'How many employees are needed?')\n   Check agent_behavior.has_slot_question_bug if present. Also check the tool_results for 'Recorded...?'.\n\n3. APPOINTMENT PRESENTATION (25%): How were the calendar slots presented?\n   - 1.0: The agent named at most 2 times, asked for a preference (morning/afternoon), or proposed a single slot\n   - 0.5: The agent named 3 times (acceptable but not ideal)\n   - 0.0: The agent listed 4+ times or rattled off a list\n   Check agent_behavior.calendar_times_offered and the agent_messages that contain clock times.\n\n4. TRANSITION PHRASE (25%): Did the agent use a transition before booking the appointment?\n   - 1.0: The agent said something like 'Great', 'Lovely', 'Then let's find a time' or similar before naming times\n   - 0.0: The agent jumped straight from the last qualification question to the appointment options\n   Check the agent_messages: is there a transition message between the last slot collection and the appointment message?\n\n=== OUTPUT FORMAT ===\nReply ONLY with a JSON object:\n{\"score\": <float 0.0-1.0>, \"reasoning\": \"<short reasoning>\", \"details\": {\"goodbye\": <0.0|1.0>, \"slot_quality\": <0.0|1.0>, \"calendar_presentation\": <0.0|0.5|1.0>, \"transition_phrase\": <0.0|1.0>}}\n\nThe total score is the weighted average: (goodbye + slot_quality + calendar_presentation + transition_phrase) / 4",
+  "variables": [
+    "input",
+    "output",
+    "ground_truth"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "agent_behavior_quality",
+  "notes": "Score config: NUMERIC, min 0, max 1. Agent conversation behaviour: goodbye, slot correctness, calendar UX, transition phrases."
+}

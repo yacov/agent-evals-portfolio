@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LLM-as-judge rubric",
+  "description": "One judge prompt with its variables and score range. Prompts use {{input}}, {{output}} and {{ground_truth}} placeholders.",
+  "type": "object",
+  "required": ["name", "description", "model", "prompt", "variables", "score_range", "score_name"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "description": {"type": "string", "minLength": 20},
+    "model": {"type": "string", "minLength": 1},
+    "prompt": {"type": "string", "minLength": 200},
+    "variables": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["input", "output", "ground_truth"]}
+    },
+    "score_range": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [{"const": 0}, {"const": 1}]
+    },
+    "score_name": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "notes": {"type": "string"}
+  }
+}

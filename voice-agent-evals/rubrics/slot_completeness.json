@@ -1,0 +1,15 @@
+{
+  "name": "slot_completeness",
+  "description": "Checks whether ALL required slots were formally collected via collect_slot BEFORE the agent made a disposition decision (end_call). Catches the bug where agents skip collect_slot and jump to end_call based on LLM intuition.",
+  "model": "gpt-4.1",
+  "prompt": "You are a strict quality reviewer for the slot collection of an AI voice assistant.\n\n=== CONVERSATION DATA ===\nTranscript and collected slots:\n{{input}}\n\n=== EXPECTED BEHAVIOUR ===\n{{ground_truth}}\n\n=== TASK ===\nCompare the ACTUALLY collected slots (slots_collected) with the EXPECTED slots (slots_expected).\n\nFor EACH expected slot check:\n1. Was collect_slot() called for this slot? (Is it in slots_collected?)\n2. Does the value match what the lead said?\n\nCRITICAL: If the lead gave a piece of information (e.g. 'three employees') but the agent did NOT call collect_slot(company_size, '3'), that is a SERIOUS ERROR. The agent must NEVER make a disqualification decision without formally recording the relevant slot.\n\n=== SCORING ===\n- 1.0: All expected slots were recorded via collect_slot. No required slots missing.\n- 0.75: One optional slot is missing, but all slots required for the disposition were recorded.\n- 0.5: One required slot that was relevant to the disposition decision is missing.\n- 0.25: Several required slots are missing although the information was available in the conversation.\n- 0.0: The agent made the disposition without recording the decisive slots.\n\nRequired slots for disqualification:\n- company_size MUST be recorded BEFORE 'fewer than 5 employees' -> NOT_QUALIFIED\n- industry MUST be recorded BEFORE 'hospitality/restaurants' -> NOT_QUALIFIED\n- decision_maker MUST be recorded BEFORE QUALIFIED\n\nReply ONLY with valid JSON:\n{\"score\": <float 0.0-1.0>, \"reasoning\": \"<reasoning>\", \"missing_slots\": [\"<list of missing slots>\"], \"collected_count\": <int>, \"expected_count\": <int>}",
+  "variables": [
+    "input",
+    "ground_truth"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "slot_completeness"
+}

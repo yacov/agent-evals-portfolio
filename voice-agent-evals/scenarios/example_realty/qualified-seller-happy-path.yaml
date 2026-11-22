@@ -1,0 +1,43 @@
+# Owner in the service area who wants to sell: full happy path with booking.
+id: qualified-seller-happy-path
+name: "Fully Qualified Seller - Owner in the Service Area"
+tenant: example_realty
+funnel_id: real_estate_seller
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100011"
+  email: "test-seller@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "Yes, I'd like to sell my flat in Central City. The address is 123 Sample Avenue, Central City. I'm the owner and want to sell within the next 3 months."
+    delay_seconds: 5
+  - text: "Yes, I'm happy to work with an agent. When are you available?"
+    delay_seconds: 5
+  - text: "The 10:00 slot works well for me. Please book it."
+    delay_seconds: 5
+
+expected:
+  disposition: QUALIFIED
+  tool_calls:
+    - collect_slot
+    - check_calendar
+    - book_appointment
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    address_raw: "123 Sample Avenue, Central City"
+    ownership: "Owner"
+    selling_timeline: "3-6 months"
+    realtor_willingness: "Yes"

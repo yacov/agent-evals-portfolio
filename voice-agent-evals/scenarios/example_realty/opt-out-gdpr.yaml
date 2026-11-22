@@ -1,0 +1,38 @@
+# GDPR opt-out with a deletion request.
+id: opt-out-gdpr
+name: "GDPR Opt-Out - No Further Contact"
+tenant: example_realty
+funnel_id: real_estate_seller
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100014"
+  email: "test-optout-realty@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "Please never call me again. I don't want any contact from you. Delete my data."
+    delay_seconds: 5
+  - text: "I really don't want any further contact. Please stop."
+    delay_seconds: 5
+
+expected:
+  disposition: NOT_QUALIFIED
+  opt_out: true
+  tool_calls:
+    - end_call
+  intents:
+    - ADD_TO_SUPPRESSION_LIST
+    - CLOSE_LEAD
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+    - NOTIFY_AGENT_TELEGRAM
+    - SEND_WA_QUALIFIED
+  slots: {}

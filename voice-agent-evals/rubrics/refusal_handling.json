@@ -1,0 +1,15 @@
+{
+  "name": "refusal_handling",
+  "description": "Evaluates how the agent handles repeated user refusals to answer required questions. Should offer a callback (PARTIAL) after 2 refusals and never reject a willing user as NOT_QUALIFIED.",
+  "model": "gpt-4.1",
+  "prompt": "You are a strict quality reviewer for the refusal handling of an AI voice assistant.\n\n=== CONVERSATION DATA ===\n{{input}}\n\n=== EXPECTED BEHAVIOUR ===\n{{ground_truth}}\n\n=== TASK ===\nCheck how the agent deals with repeated refusals by the lead.\n\nSCENARIOS:\n\nA) The lead refuses a required question once: the agent may politely ask again (explaining why the information matters). Score: judge whether the follow-up was appropriate.\n\nB) The lead refuses the same question twice: the agent MUST switch to offering a callback ('I understand. Then let's arrange a callback...') and call end_call(PARTIAL). The agent must NOT ask a third time.\n\nC) The lead refuses 3+ times: SERIOUS ERROR. The agent ignored the two-refusal rule.\n\nD) The agent classifies a cooperative lead as NOT_QUALIFIED because one question was not answered: SERIOUS ERROR. Refusal is not disqualification.\n\nE) No refusal in the conversation: score 1.0 (not applicable).\n\n=== SCORING ===\n- 1.0: No refusal, OR the agent correctly switched to a callback after at most 2 attempts.\n- 0.75: The agent asked once too often (3 instead of 2 attempts) but then reacted correctly.\n- 0.5: The agent asked too often but reacted correctly in the end.\n- 0.25: The agent classified the lead as NOT_QUALIFIED although they were cooperative.\n- 0.0: The agent rejected the lead and hung up without offering a callback.\n\nReply ONLY with valid JSON:\n{\"score\": <float 0.0-1.0>, \"reasoning\": \"<reasoning>\", \"refusal_count\": <int>, \"agent_reaction\": \"<callback|rejection|appropriate|not_applicable>\"}",
+  "variables": [
+    "input",
+    "ground_truth"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "refusal_handling"
+}

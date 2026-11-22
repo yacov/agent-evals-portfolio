@@ -1,0 +1,17 @@
+{
+  "name": "slot_collection_quality",
+  "description": "Evaluates whether all required funnel slots were correctly extracted and carried through into extracted_slots. Used for Phase 2 (post-call analysis) benchmark evaluation across all tenants (real estate, recruiting, B2B advertising).",
+  "model": "gpt-4.1",
+  "prompt": "You are a quality reviewer for a lead-qualification system.\n\nThe system analysed the following conversation:\n\nINPUT (system_prompt + user_message with the collected data and transcript):\n{{input}}\n\nSYSTEM OUTPUT (extracted IntentJson):\n{{output}}\n\nEXPECTED OUTPUT (correct reference extraction from the ground truth):\n{{ground_truth}}\n\nRate the quality of the slot extraction on a scale from 0 to 1:\n\n**Criteria:**\n- 1.0: All required slots extracted correctly; values match the collected data. No slot missing, no value distorted.\n- 0.7-0.9: Most slots correct. Small inaccuracies allowed (e.g. slightly different spelling, missing optional fields).\n- 0.4-0.6: Some required slots are missing or have wrong values. Extraction is partly correct.\n- 0.1-0.3: Significant extraction errors. Many required slots missing or wrong.\n- 0.0: No usable slot extraction. extracted_slots is empty or completely wrong.\n\n**Important rules:**\n- Compare extracted_slots in the output with collected_data in the input.\n- Required slots (required_slots in the funnel) count more than optional slots.\n- Missing optional slots are less serious than missing required slots.\n- Evaluate only the extraction, not the disposition or the intents.\n- The content may not be in English; judge semantic correctness, not character-for-character equality.\n\nReply with valid JSON only:\n{\"score\": <float 0.0-1.0>, \"reasoning\": \"<reasoning, max. 3 sentences>\"}",
+  "variables": [
+    "input",
+    "output",
+    "ground_truth"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "slot_collection_quality",
+  "notes": "Designed for the multi-tenant factory pattern; works across the real-estate, recruiting and B2B advertising funnels. The funnel-specific required_slots list is embedded in the system_prompt inside {{input}}."
+}

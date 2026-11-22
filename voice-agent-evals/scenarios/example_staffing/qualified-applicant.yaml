@@ -1,0 +1,47 @@
+# Fully qualified job applicant: the agent books a first interview.
+id: qualified-applicant
+name: "Fully Qualified Job Applicant - Happy Path"
+tenant: example_staffing
+funnel_id: funnel_b_applicant
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: "Max Example"
+  phone: "+15550100002"
+  email: "test-applicant@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "I'm looking for a job. My name is Max Example. I live in the city and have a permanent address."
+    delay_seconds: 5
+  - text: "I'm available immediately and would like to work in a warehouse. I have 2 years of experience as a forklift driver."
+    delay_seconds: 5
+  - text: "Yes, I'd like an appointment for a first interview."
+    delay_seconds: 5
+  - text: "The first slot works for me. Please book that one."
+    delay_seconds: 5
+
+expected:
+  disposition: QUALIFIED
+  tool_calls:
+    - collect_slot
+    - check_calendar
+    - book_appointment
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    first_name: "Max"
+    last_name: "Example"
+    lives_in_country: true
+    availability: "immediately"
+    job_area: "warehouse"
+    experience: "2 years forklift driver"

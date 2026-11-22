@@ -1,0 +1,16 @@
+{
+  "name": "conversation_quality",
+  "description": "Evaluates the overall quality of the Phase 2 analysis output: soundness of reasoning, GDPR compliance awareness, absence of hallucinations, and a professional tone suitable for real-estate, recruiting and B2B advertising contexts.",
+  "model": "gpt-4.1",
+  "prompt": "You are a quality reviewer for a lead-qualification system (the lead-qualification platform).\n\nThe system analyses completed qualification conversations and produces a structured assessment. The output must:\n1. Be factually correct and clearly reasoned.\n2. Take GDPR-relevant aspects into account (in particular opt-out and consents).\n3. Contain no hallucinations (no facts invented that are not in the transcript).\n4. Be worded professionally and factually, appropriate for a B2C/B2B context.\n\nINPUT (analysis data and transcript of the qualification conversation):\n{{input}}\n\nSYSTEM OUTPUT (produced IntentJson with reasoning):\n{{output}}\n\nRate the overall quality of the analysis on a scale from 0 to 1:\n\n**Scoring criteria:**\n\n**Quality of reasoning:**\n- Is the reasoning logically consistent with the lead_disposition?\n- Are the relevant parts of the conversation summarised correctly?\n- Are there 2-3 concise sentences?\n\n**GDPR compliance:**\n- If the conversation contains an opt-out signal, was it recognised?\n- Were the consents (GDPR consent, WhatsApp consent) correctly taken into account for the disposition?\n- No lead should be classified as QUALIFIED if GDPR consent is missing and that is a mandatory gate.\n\n**No hallucinations:**\n- Does the reasoning contain only information that comes from the collected data or the transcript?\n- Were no false slot values invented?\n\n**Professional language:**\n- Is the reasoning factual and written in the expected output language?\n- No inappropriate or judgemental wording about the lead?\n\n**Scoring:**\n- 1.0: All four dimensions excellent. Reasoning precise, GDPR-compliant, free of hallucinations, professional.\n- 0.7-0.9: Good, minor shortcomings (e.g. slightly imprecise reasoning, one insignificant suspected hallucination).\n- 0.4-0.6: Noticeable quality problems in one or more dimensions.\n- 0.1-0.3: Significant shortcomings, e.g. a GDPR signal ignored or clear hallucinations.\n- 0.0: Fundamental quality failures, e.g. invented facts used as reasoning, an opt-out signal completely ignored.\n\nReply with valid JSON only:\n{\"score\": <float 0.0-1.0>, \"reasoning\": \"<reasoning, max. 3 sentences>\", \"gdpr_compliant\": <true|false>, \"hallucination_detected\": <true|false>}",
+  "variables": [
+    "input",
+    "output"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "conversation_quality",
+  "notes": "Does not use ground_truth: it assesses output quality holistically. The gdpr_compliant and hallucination_detected booleans allow automated alerting on critical failures regardless of the numeric score. Covers all three tenants (real estate, recruiting, B2B advertising)."
+}

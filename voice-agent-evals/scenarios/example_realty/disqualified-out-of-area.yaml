@@ -1,0 +1,36 @@
+# Property in an out-of-area city: the agent must reject the location.
+id: disqualified-out-of-area
+name: "Disqualified - Property Outside the Service Area"
+tenant: example_realty
+funnel_id: real_estate_seller
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100012"
+  email: "test-out-of-area@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "I'd like to sell my house in Distant City. 3 Market Square, Distant City."
+    delay_seconds: 5
+
+expected:
+  disposition: NOT_QUALIFIED
+  tool_calls:
+    - collect_slot
+    - reject_unsupported_location
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    address_raw: "3 Market Square, Distant City"
+    outside_service_area: true

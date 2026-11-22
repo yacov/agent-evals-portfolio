@@ -1,0 +1,40 @@
+# The lead gives some context, then asks for a callback: PARTIAL with summary.
+id: partial-callback
+name: "Partial - Callback Requested (No Appointment)"
+tenant: example_staffing
+funnel_id: funnel_a_b2b
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100006"
+  email: "test-callback@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "I'm with Example Industrial Ltd., 50 employees, mechanical engineering."
+    delay_seconds: 5
+  - text: "I don't have time right now. Could you call me back tomorrow at 2 pm?"
+    delay_seconds: 5
+  - text: "Yes please, tomorrow at 2 pm. I have to go now."
+    delay_seconds: 5
+
+expected:
+  disposition: PARTIAL
+  tool_calls:
+    - collect_slot
+    - end_call
+  intents:
+    - SCHEDULE_CALLBACK
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    company_name: "Example Industrial Ltd."
+    company_size: "50"
+    industry: "mechanical engineering"

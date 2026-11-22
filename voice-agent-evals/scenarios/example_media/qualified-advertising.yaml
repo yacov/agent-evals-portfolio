@@ -1,0 +1,47 @@
+# Business owner interested in local advertising: full qualification and booking.
+# This tenant does not ask for recording consent.
+id: qualified-advertising
+name: "Fully Qualified Advertising Lead - Car Dealership"
+tenant: example_media
+funnel_id: funnel_a_customer_acquisition
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100021"
+  email: "test-ads@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "I'm the owner of Sample Motors in the city centre. We're looking for local advertising for our workshop. Advertising in local shops sounds interesting."
+    delay_seconds: 5
+  - text: "Yes, we're very interested. We'd like to learn more."
+    delay_seconds: 5
+  - text: "Yes, an appointment would be good. Please show me the available times."
+    delay_seconds: 5
+  - text: "The first slot works for me. Please book it."
+    delay_seconds: 5
+
+expected:
+  disposition: QUALIFIED
+  tool_calls:
+    - collect_slot
+    - check_calendar
+    - book_appointment
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    company_name: "Sample Motors"
+    region: "Central City"
+    decision_maker: "owner"
+    interest_level: "high"
+    industry: "car dealership"

@@ -1,0 +1,39 @@
+# GDPR opt-out: the lead refuses all further contact. The agent must end the
+# conversation at once; the dispatcher must suppress the contact and send nothing.
+id: opt-out
+name: "GDPR Opt-Out / STOP Request"
+tenant: example_staffing
+funnel_id: funnel_a_b2b
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100005"
+  email: "test-optout@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "Please don't call me again. I'm not interested and don't want any further contact. Thanks."
+    delay_seconds: 5
+  - text: "No, really, I want absolutely no further contact. STOP."
+    delay_seconds: 5
+
+expected:
+  disposition: NOT_QUALIFIED
+  opt_out: true
+  tool_calls:
+    - end_call
+  intents:
+    - ADD_TO_SUPPRESSION_LIST
+    - CLOSE_LEAD
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+    - NOTIFY_AGENT_TELEGRAM
+    - SEND_WA_QUALIFIED
+  slots: {}

@@ -1,0 +1,30 @@
+[project]
+name = "voice-agent-evals"
+version = "0.1.0"
+description = "LLM-as-judge rubrics, scripted test conversations and an evaluation runner for a lead-qualification voice agent"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "jsonschema>=4.26",
+    "pyyaml>=6.0.3",
+]
+
+[project.optional-dependencies]
+# Needed only for the online paths (Langfuse experiments, LLM judge, Phase 2 re-runs).
+online = [
+    "langfuse>=5.2",
+    "openai>=3.57",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-p no:cacheprovider"

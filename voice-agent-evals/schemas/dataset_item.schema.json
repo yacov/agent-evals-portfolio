@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Local evaluation dataset item (one JSONL line)",
+  "description": "'recorded_output' is what the system under test produced and is what the replay task hands to the judges. 'expected_output' is the reference. Variants: 'reference' = correct behaviour, 'flawed' = a planted agent defect, 'environment_fault' = correct agent but a misbehaving tool. 'defect_targets' lists the rubrics that should notice the defect. Reviewer notes live in metadata and are never shown to the judge.",
+  "type": "object",
+  "required": ["id", "input", "expected_output", "recorded_output", "metadata"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+    "input": {"type": "object"},
+    "expected_output": {"type": "object"},
+    "recorded_output": {"type": "object"},
+    "metadata": {
+      "type": "object",
+      "required": ["kind", "tenant", "variant", "rubrics"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {"enum": ["phase2", "conversation", "dispatcher"]},
+        "tenant": {"enum": ["example_realty", "example_staffing", "example_media"]},
+        "variant": {"enum": ["reference", "flawed", "environment_fault"]},
+        "rubrics": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "defect": {"type": "string"},
+        "defect_targets": {"type": "array", "items": {"type": "string"}},
+        "reviewer_notes": {"type": "array", "items": {"type": "string"}}
+      },
+      "if": {"properties": {"variant": {"enum": ["flawed", "environment_fault"]}}},
+      "then": {"required": ["defect", "defect_targets"]}
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "appointment_accuracy",
+  "description": "Checks whether the agent confirmed the exact booked appointment time (from the book_appointment tool response), not a hallucinated or previously discussed time.",
+  "model": "gpt-4.1",
+  "prompt": "You are a strict quality reviewer for the appointment bookings of an AI voice assistant.\n\n=== CONVERSATION DATA ===\n{{input}}\n\n=== EXPECTED BEHAVIOUR ===\n{{ground_truth}}\n\n=== TASK ===\nCheck whether the agent confirmed the CORRECT time of the booked appointment.\n\nAnalyse:\n1. Which time did the user propose or accept?\n2. Which time did book_appointment return (the time that was actually booked)?\n3. Which time did the agent state to the lead in the confirmation?\n\nERROR TYPES:\n- Agent says '10 o'clock' but book_appointment booked 12:00 -> HALLUCINATION (score 0.0)\n- Agent says '12 o'clock' although the user agreed to '10 o'clock' and book_appointment booked 12:00 -> CORRECT but a UX problem (score 0.5)\n- Agent states exactly the time returned by book_appointment -> CORRECT (score 1.0)\n- No appointment booked in this conversation -> NOT APPLICABLE (score 1.0)\n\n=== SCORING ===\n- 1.0: The confirmed time matches the book_appointment result, OR no appointment was booked.\n- 0.5: The confirmed time matches book_appointment but differs from what the user asked for (booking-system issue, not an agent error).\n- 0.0: The agent confirmed a different time than book_appointment returned (hallucination).\n\nReply ONLY with valid JSON:\n{\"score\": <float 0.0-1.0>, \"reasoning\": \"<reasoning>\", \"user_requested_time\": \"<time>\", \"booked_time\": \"<time>\", \"confirmed_time\": \"<time>\"}",
+  "variables": [
+    "input",
+    "ground_truth"
+  ],
+  "score_range": [
+    0,
+    1
+  ],
+  "score_name": "appointment_accuracy",
+  "notes": "Separates an agent error (confirming a time the booking tool did not return, 0.0) from an environment error (the booking tool returning a different slot than agreed, 0.5)."
+}

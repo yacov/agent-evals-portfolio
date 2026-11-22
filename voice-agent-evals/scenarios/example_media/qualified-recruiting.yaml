@@ -1,0 +1,46 @@
+# Practice owner who needs staff (recruiting funnel): full qualified path.
+id: qualified-recruiting
+name: "Fully Qualified Recruiting Lead - Dental Practice"
+tenant: example_media
+funnel_id: funnel_b_recruiting
+channel: whatsapp_text
+mode: whatsapp_text
+
+lead:
+  name: null
+  phone: "+15550100022"
+  email: "test-recruiting@example.com"
+
+form_answers: {}
+
+previous_context: null
+
+messages:
+  - text: "Hello"
+    delay_seconds: 2
+  - text: "This is Dr. Placeholder from Example Dental Practice in Central City. We urgently need a dental assistant."
+    delay_seconds: 5
+  - text: "Yes, I own the practice. The need is urgent."
+    delay_seconds: 5
+  - text: "Yes, I'd like a consultation. Show me the free slots."
+    delay_seconds: 5
+  - text: "Please book the first slot."
+    delay_seconds: 5
+
+expected:
+  disposition: QUALIFIED
+  tool_calls:
+    - collect_slot
+    - check_calendar
+    - book_appointment
+    - end_call
+  intents:
+    - CRM_UPDATE
+  forbidden_intents:
+    - BOOK_APPOINTMENT
+  slots:
+    company_name: "Example Dental Practice"
+    region: "Central City"
+    decision_maker: "owner"
+    is_healthcare_sector: true
+    staffing_need: "dental assistant"
