@@ -1,0 +1,9 @@
+{
+  "id": "M18",
+  "name": "nan-and-infinity-accepted",
+  "kind": "validation",
+  "description": "Number validation only rejects negatives; NaN and Infinity slip through.",
+  "file": "src/quote.ts",
+  "search": "if (!(Number.isFinite(value) && value >= 0)) {",
+  "replace": "if (value < 0) {"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "M08",
+  "name": "long-distance-flag-inclusive",
+  "kind": "boundary",
+  "description": "A move of exactly 50 km is flagged for review (> became >=).",
+  "file": "src/quote.ts",
+  "search": "if (distanceKm > REVIEW_DISTANCE_KM)",
+  "replace": "if (distanceKm >= REVIEW_DISTANCE_KM)"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "M11",
+  "name": "stairs-price-as-ex-vat",
+  "kind": "unit-mix-up",
+  "description": "The stairs price, which includes VAT, is booked as an ex-VAT amount (VAT charged twice).",
+  "file": "src/quote.ts",
+  "search": "exVat(flights * STAIRS_PER_FLIGHT_INC_VAT)",
+  "replace": "flights * STAIRS_PER_FLIGHT_INC_VAT"
+}

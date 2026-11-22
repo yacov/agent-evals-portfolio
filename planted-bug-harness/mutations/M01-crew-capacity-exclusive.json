@@ -1,0 +1,9 @@
+{
+  "id": "M01",
+  "name": "crew-capacity-exclusive",
+  "kind": "boundary",
+  "description": "A volume exactly equal to a truck capacity is sent to the next, bigger crew (<= became <).",
+  "file": "src/quote.ts",
+  "search": "crews.find((c) => volumeM3 <= c.capacityM3)",
+  "replace": "crews.find((c) => volumeM3 < c.capacityM3)"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "M09",
+  "name": "over-capacity-flag-inclusive",
+  "kind": "boundary",
+  "description": "A volume exactly equal to the largest truck is flagged as over capacity (> became >=).",
+  "file": "src/quote.ts",
+  "search": "if (volumeM3 > largest.capacityM3)",
+  "replace": "if (volumeM3 >= largest.capacityM3)"
+}

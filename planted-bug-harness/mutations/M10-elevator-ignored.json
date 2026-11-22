@@ -1,0 +1,9 @@
+{
+  "id": "M10",
+  "name": "elevator-ignored",
+  "kind": "dropped-condition",
+  "description": "Stairs are charged even when there is an elevator.",
+  "file": "src/quote.ts",
+  "search": "if (flights > 0 && !access.elevator) {",
+  "replace": "if (flights > 0) {"
+}

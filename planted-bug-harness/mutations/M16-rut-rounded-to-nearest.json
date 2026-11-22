@@ -1,0 +1,9 @@
+{
+  "id": "M16",
+  "name": "rut-rounded-to-nearest",
+  "kind": "rounding",
+  "description": "The RUT deduction is rounded to the nearest krona instead of down (can over-promise by 1 kr).",
+  "file": "src/quote.ts",
+  "search": "rutDeduction = Math.floor(",
+  "replace": "rutDeduction = Math.round("
+}

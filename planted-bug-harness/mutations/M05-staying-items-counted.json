@@ -1,0 +1,9 @@
+{
+  "id": "M05",
+  "name": "staying-items-counted",
+  "kind": "dropped-condition",
+  "description": "Inventory lines marked as staying behind are counted in the volume (filter removed).",
+  "file": "src/quote.ts",
+  "search": "\n      .filter((item) => item.moving !== false)",
+  "replace": ""
+}

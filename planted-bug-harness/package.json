@@ -1,0 +1,23 @@
+{
+  "name": "planted-bug-harness",
+  "version": "1.0.0",
+  "description": "Measures whether a test suite catches deliberately planted bugs: a first-pass suite vs a spec-pinned suite on a moving-company quote engine.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "plant": "node scripts/plant.mjs",
+    "coverage:naive": "vitest run tests/naive.test.ts --coverage.enabled --coverage.include=src/quote.ts --coverage.reporter=text",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "^5.1.1",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1"
+  }
+}

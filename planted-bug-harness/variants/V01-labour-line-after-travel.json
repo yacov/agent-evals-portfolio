@@ -1,0 +1,9 @@
+{
+  "id": "V01",
+  "name": "labour-line-after-travel",
+  "kind": "correct-variant",
+  "description": "Emits the labour line after the travel line (line order is unspecified).",
+  "file": "src/quote.ts",
+  "search": "  addLine('labour', hours * crew.hourlyRateExVat, true);\n\n  // Travel\n  const distanceKm = input.distanceKm ?? 0;\n  if (distanceKm > FREE_KM) addLine('travel', (distanceKm - FREE_KM) * PER_KM_EX_VAT, false);\n",
+  "replace": "\n  // Travel\n  const distanceKm = input.distanceKm ?? 0;\n  if (distanceKm > FREE_KM) addLine('travel', (distanceKm - FREE_KM) * PER_KM_EX_VAT, false);\n  addLine('labour', hours * crew.hourlyRateExVat, true);\n"
+}

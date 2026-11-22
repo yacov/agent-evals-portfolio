@@ -1,0 +1,9 @@
+{
+  "id": "M21",
+  "name": "crew-sort-reversed",
+  "kind": "swapped-arguments",
+  "description": "The crew sort comparator has its arguments swapped, so crews are tried largest first.",
+  "file": "src/quote.ts",
+  "search": ".sort((a, b) => a.capacityM3 - b.capacityM3)",
+  "replace": ".sort((a, b) => b.capacityM3 - a.capacityM3)"
+}

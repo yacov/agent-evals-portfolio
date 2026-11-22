@@ -1,0 +1,9 @@
+{
+  "id": "M03",
+  "name": "minimum-hours-dropped",
+  "kind": "dropped-condition",
+  "description": "The crew's minimum billable hours are no longer enforced.",
+  "file": "src/quote.ts",
+  "search": "const hours = Math.max(crew.minimumHours, handlingHours);",
+  "replace": "const hours = handlingHours;"
+}

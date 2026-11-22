@@ -1,0 +1,9 @@
+{
+  "id": "M15",
+  "name": "rut-cap-missing",
+  "kind": "missing-cap",
+  "description": "The RUT deduction ignores the allowance the customer has left (no cap).",
+  "file": "src/quote.ts",
+  "search": "rutDeduction = Math.floor(Math.min(rutEligibleIncVat * rateCard.rut.rate, allowance));",
+  "replace": "rutDeduction = Math.floor(rutEligibleIncVat * rateCard.rut.rate);"
+}

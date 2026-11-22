@@ -1,0 +1,9 @@
+{
+  "id": "M13",
+  "name": "heavy-flag-without-surcharge",
+  "kind": "dropped-condition",
+  "description": "The heavy-items flag alone no longer adds the surcharge; only a special-items list does.",
+  "file": "src/quote.ts",
+  "search": "if (input.heavyItems || specialItems.length > 0) addLine('heavy'",
+  "replace": "if (specialItems.length > 0) addLine('heavy'"
+}

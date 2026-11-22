@@ -1,0 +1,9 @@
+{
+  "id": "M20",
+  "name": "rut-for-every-non-office-move",
+  "kind": "wrong-comparison",
+  "description": "RUT is granted to every move that is not an office move, so storage moves get it too.",
+  "file": "src/quote.ts",
+  "search": "input.moveType === 'private'",
+  "replace": "input.moveType !== 'office'"
+}

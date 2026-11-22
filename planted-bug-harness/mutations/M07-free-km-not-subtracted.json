@@ -1,0 +1,9 @@
+{
+  "id": "M07",
+  "name": "free-km-not-subtracted",
+  "kind": "dropped-term",
+  "description": "Once a move is over 20 km, the whole distance is charged instead of only the part above 20 km.",
+  "file": "src/quote.ts",
+  "search": "addLine('travel', (distanceKm - FREE_KM) * PER_KM_EX_VAT, false)",
+  "replace": "addLine('travel', distanceKm * PER_KM_EX_VAT, false)"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "M14",
+  "name": "pensioner-discount-on-all-lines",
+  "kind": "dropped-condition",
+  "description": "The pensioner discount is taken off every line, including travel, which is not labour.",
+  "file": "src/quote.ts",
+  "search": "const eligibleExVat = sumExVat(lines.filter((line) => line.rutEligible));",
+  "replace": "const eligibleExVat = sumExVat(lines);"
+}

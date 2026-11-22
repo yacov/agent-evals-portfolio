@@ -1,0 +1,9 @@
+{
+  "id": "M06",
+  "name": "area-factor-typo",
+  "kind": "wrong-constant",
+  "description": "The m3-per-m2 factor for the living-area estimate has its digits swapped (0.35 became 0.53).",
+  "file": "src/quote.ts",
+  "search": "const AREA_TO_M3 = 0.35;",
+  "replace": "const AREA_TO_M3 = 0.53;"
+}

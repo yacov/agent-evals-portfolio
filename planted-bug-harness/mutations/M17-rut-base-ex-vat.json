@@ -1,0 +1,9 @@
+{
+  "id": "M17",
+  "name": "rut-base-ex-vat",
+  "kind": "unit-mix-up",
+  "description": "The RUT base is taken ex VAT instead of inc VAT (deduction 20 % too small).",
+  "file": "src/quote.ts",
+  "search": "money(sumExVat(lines.filter((line) => line.rutEligible)) * (1 + rateCard.vatRate))",
+  "replace": "money(sumExVat(lines.filter((line) => line.rutEligible)))"
+}

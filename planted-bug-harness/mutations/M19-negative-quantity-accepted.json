@@ -1,0 +1,9 @@
+{
+  "id": "M19",
+  "name": "negative-quantity-accepted",
+  "kind": "validation",
+  "description": "A negative inventory quantity is accepted (only fractional quantities are rejected).",
+  "file": "src/quote.ts",
+  "search": "if (!Number.isInteger(item.quantity) || item.quantity < 0) {",
+  "replace": "if (!Number.isInteger(item.quantity)) {"
+}

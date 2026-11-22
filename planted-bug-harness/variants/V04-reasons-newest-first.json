@@ -1,0 +1,9 @@
+{
+  "id": "V04",
+  "name": "reasons-newest-first",
+  "kind": "correct-variant",
+  "description": "Lists review reasons newest first (reason order is unspecified).",
+  "file": "src/quote.ts",
+  "search": "if (!reviewReasons.includes(reason)) reviewReasons.push(reason);",
+  "replace": "if (!reviewReasons.includes(reason)) reviewReasons.unshift(reason);"
+}

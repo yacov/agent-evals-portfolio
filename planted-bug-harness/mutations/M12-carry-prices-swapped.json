@@ -1,0 +1,9 @@
+{
+  "id": "M12",
+  "name": "carry-prices-swapped",
+  "kind": "swapped-values",
+  "description": "The 10-30 m and over-30 m carry prices are swapped.",
+  "file": "src/quote.ts",
+  "search": "const CARRY_10_30M_INC_VAT = 300;\nconst CARRY_OVER_30M_INC_VAT = 700;",
+  "replace": "const CARRY_10_30M_INC_VAT = 700;\nconst CARRY_OVER_30M_INC_VAT = 300;"
+}

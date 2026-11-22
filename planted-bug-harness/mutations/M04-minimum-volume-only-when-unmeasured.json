@@ -1,0 +1,9 @@
+{
+  "id": "M04",
+  "name": "minimum-volume-only-when-unmeasured",
+  "kind": "dropped-condition",
+  "description": "The 5 m3 minimum applies only when nothing was measured, not to a small measured inventory.",
+  "file": "src/quote.ts",
+  "search": "return Math.max(measured, MIN_BILLABLE_M3);",
+  "replace": "return measured > 0 ? measured : MIN_BILLABLE_M3;"
+}

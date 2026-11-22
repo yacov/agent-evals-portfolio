@@ -1,0 +1,9 @@
+{
+  "id": "V03",
+  "name": "other-error-wording",
+  "kind": "correct-variant",
+  "description": "Different error message wording (wording is unspecified).",
+  "file": "src/quote.ts",
+  "search": "'must be a finite number >= 0'",
+  "replace": "'expected a non-negative, finite number'"
+}

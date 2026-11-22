@@ -1,0 +1,9 @@
+{
+  "id": "M02",
+  "name": "hours-rounded-to-nearest",
+  "kind": "rounding",
+  "description": "Handling hours are rounded to the nearest hour instead of up (ceil became round).",
+  "file": "src/quote.ts",
+  "search": "Math.ceil((volumeM3 * rateCard.handlingMinutesPerM3) / 60)",
+  "replace": "Math.round((volumeM3 * rateCard.handlingMinutesPerM3) / 60)"
+}

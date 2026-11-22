@@ -1,0 +1,9 @@
+{
+  "id": "V02",
+  "name": "always-emit-travel-line",
+  "kind": "correct-variant",
+  "description": "Always emits a travel line, 0 SEK within 20 km (zero-amount lines are allowed).",
+  "file": "src/quote.ts",
+  "search": "if (distanceKm > FREE_KM) addLine('travel', (distanceKm - FREE_KM) * PER_KM_EX_VAT, false);",
+  "replace": "addLine('travel', Math.max(0, distanceKm - FREE_KM) * PER_KM_EX_VAT, false);"
+}
