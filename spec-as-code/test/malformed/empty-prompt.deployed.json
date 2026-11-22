@@ -1,0 +1,7 @@
+{
+  "_planted": "The platform API returned an agent with an empty prompt. A claim scan over it would pass vacuously.",
+  "agent": "nova",
+  "prompt": "",
+  "tools": [],
+  "stages": []
+}

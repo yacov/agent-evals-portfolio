@@ -1,0 +1,12 @@
+# A spec that forgot its forbidden actions. check-drift.mjs must refuse to check against it.
+spec_version: 1
+meta: { agent: nova, company: Example Home Services, role: intake assistant, goal: Book visits. }
+types: { Caller: The person in the conversation now. }
+relations: []
+trades: { all: [plumbing], in_scope: [plumbing] }
+stages: [{ id: greet, goal: Learn what is wrong. }]
+actions: { record_job: { purpose: Write the job down., required: [symptom] } }
+claims: { retrieval_rule: State only the claims below., approved: [], banned: [] }
+policies: {}
+rules: [{ id: rule.first_turn, when: the job is not known yet, may: ask what is wrong, using: [record_job] }]
+tests: []

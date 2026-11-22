@@ -1,0 +1,22 @@
+{
+  "name": "spec-as-code",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An agent's allowed claims, actions, stages and rules as a versioned YAML spec; the system prompt compiled from it; a check that fails when the deployed agent drifts.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "compile": "node compile.mjs --out generated/assistant.prompt.txt",
+    "check": "node check-drift.mjs fixtures/deployed.in-sync.json",
+    "check:all": "node check-drift.mjs fixtures",
+    "fixtures": "node fixtures/make-fixtures.mjs",
+    "mutants": "node scripts/mutants.mjs"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1"
+  }
+}
