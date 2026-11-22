@@ -1,0 +1,69 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  voice-agent-evals:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: voice-agent-evals
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Tests (offline, no API keys)
+        run: uv run pytest -q
+      - name: Offline evaluation run
+        run: uv run python run_evaluation.py --offline
+
+  spec-as-code:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: spec-as-code
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - name: Tests
+        run: npm test
+      - name: Can the tests fail? (break one check at a time)
+        run: npm run mutants
+      - name: Generated prompt is up to date
+        run: npm run compile && git diff --exit-code generated/
+
+  planted-bug-harness:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: planted-bug-harness
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run typecheck
+      - name: Tests
+        run: npm test
+      - name: Planted bugs and correct variants (fails if the behaviour suite misses one)
+        run: npm run plant -- --gate
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
